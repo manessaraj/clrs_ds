@@ -24,6 +24,6 @@ public class RedBlackNode<T> extends TreeNode<T> {
         public RedBlackNodeBuilder<T> self() {
             return this;
         }
-
     }
+
 }
