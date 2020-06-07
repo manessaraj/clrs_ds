@@ -17,4 +17,8 @@ public abstract class Node<T> {
     Node (Builder<T> builder) {
         this.key = builder.key;
     }
+
+    public T getKey() {
+        return key;
+    }
 }

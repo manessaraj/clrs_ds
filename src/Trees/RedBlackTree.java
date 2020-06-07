@@ -2,6 +2,7 @@ package Trees;
 
 import jdk.jshell.spi.ExecutionControl;
 import models.RedBlackNode;
+import models.TreeNode;
 
 /*
 * @author: Saraj Singh Manes
@@ -43,5 +44,54 @@ public class RedBlackTree<T> extends Tree<T> implements TreeRotations{
     * */
     public int blackHeight(RedBlackNode<T> node) {
         throw new UnsupportedOperationException("Method needs implementation");
+    }
+
+    @Override
+    public TreeNode rotateLeft(TreeNode x) {
+        assert (x.getRight() != null);
+        TreeNode y = x.getRight();
+        TreeNode subtreeParent = x.getParent();
+        x.setRight(y.getLeft()); // move beta.
+        if (x.getRight() != null) {
+            x.getRight().setParent(x);
+        }
+        //swap x and y
+        y.setLeft(x);
+        x.setParent(y);
+
+        y.setParent(subtreeParent);
+
+        //update parent's pointers
+        updateChildOfParent(subtreeParent, x, y);
+        return y;
+    }
+
+    private void updateChildOfParent(TreeNode parent, TreeNode oldChild, TreeNode newChild) {
+        if (parent == null) {
+            // x was root
+            this.root = (RedBlackNode<T>) newChild;
+        } else if (parent.getRight() == oldChild) {
+            parent.setRight(newChild);
+        } else {
+            parent.setLeft(newChild);
+        }
+    }
+
+    @Override
+    public TreeNode<T> rotateRight(TreeNode y) {
+        assert (y.getLeft() != null);
+        TreeNode subTreeParent = y.getParent();
+        TreeNode x = y.getLeft();
+        y.setLeft(x.getRight()); // move beta
+        if (y.getLeft() != null) {
+            y.getLeft().setParent(y);
+        }
+        //swap x and y
+        x.setRight(y);
+        y.setParent(x);
+
+        x.setParent(subTreeParent);
+        this.updateChildOfParent(subTreeParent, y, x);
+        return x;
     }
 }

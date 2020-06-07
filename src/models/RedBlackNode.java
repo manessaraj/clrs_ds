@@ -26,4 +26,11 @@ public class RedBlackNode<T> extends TreeNode<T> {
         }
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }

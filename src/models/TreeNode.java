@@ -1,7 +1,6 @@
 package models;
 
 public class TreeNode<T> extends Node {
-    private T key;
     private TreeNode<T> left;
     private TreeNode<T> right;
     private TreeNode<T> parent;
@@ -43,4 +42,27 @@ public class TreeNode<T> extends Node {
         }
     }
 
+    public TreeNode<T> getLeft() {
+        return left;
+    }
+
+    public TreeNode<T> getRight() {
+        return right;
+    }
+
+    public TreeNode<T> getParent() {
+        return parent;
+    }
+
+    public void setRight(TreeNode<T> right) {
+        this.right = right;
+    }
+
+    public void setParent(TreeNode<T> parent) {
+        this.parent = parent;
+    }
+
+    public void setLeft(TreeNode<T> left) {
+        this.left = left;
+    }
 }
