@@ -30,6 +30,15 @@ public class RedBlackNode<T> extends TreeNode<T> {
         return color;
     }
 
+
+    public RedBlackNode getLeft() {
+        return (RedBlackNode) super.getLeft();
+    }
+
+    public RedBlackNode getRight() {
+        return (RedBlackNode) super.getRight();
+    }
+
     public void setColor(Color color) {
         this.color = color;
     }
