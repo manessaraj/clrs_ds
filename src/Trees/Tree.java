@@ -2,7 +2,7 @@ package Trees;
 
 import models.TreeNode;
 
-public class Tree<T> {
+public class Tree<T extends Comparable<T>> {
     private TreeNode<T> root;
     public void treeInsert(TreeNode<T> node, TreeNode<T> nullNode) {
         TreeNode<T> parent = nullNode;
@@ -26,4 +26,66 @@ public class Tree<T> {
             parent.setRight(node);
         }
     }
+
+
+    /*
+     * Helper method for Node delete
+     * Given a node Z and node Y. Node Z is getting deleted and Y is going to replace it
+     */
+    public void transplantNode(TreeNode nodeTodelete, TreeNode replacementNode) {
+        assert nodeTodelete != null;
+        if (nodeTodelete.getParent() == null) {
+            // root Node
+            this.root = replacementNode;
+        } else if (nodeTodelete.getParent().getLeft() == nodeTodelete) {
+            nodeTodelete.getParent().setLeft(replacementNode);
+        } else {
+            nodeTodelete.getParent().setRight(replacementNode);
+        }
+
+        if (replacementNode != null) {
+            replacementNode.setParent(nodeTodelete.getParent());
+        }
+    }
+
+    /**
+     * Deletion of a node can be regarded as replacement with left or right child. This means, if a parent node is getting
+     * deleted either right or left child replaces that node in tree. We will stick with CLRS notion and use right child
+     * as replacement.
+     * */
+
+    public void deleteNode(TreeNode node) {
+        if (node != null) {
+            if (node.getLeft() == null) {
+                transplantNode(node, node.getRight());
+            } else if (node.getRight() == null) {
+                transplantNode(node, node.getLeft());
+            } else {
+                // Node has two children, so replacement is not that simple.
+                TreeNode replacement = getMinimumNodeInSubTree(node.getRight());
+                if (replacement.getParent() != node) {
+                    transplantNode(replacement, replacement.getRight());
+                    replacement.setRight(node.getRight());
+                    replacement.getRight().setParent(replacement);
+                }
+                transplantNode(node, replacement);
+                replacement.setLeft(node.getLeft());
+                replacement.getLeft().setParent(replacement);
+            }
+        }
+    }
+
+
+    private TreeNode getMinimumNodeInSubTree(TreeNode node) {
+        TreeNode itr = null;
+        while (node != null) {
+            itr = node;
+            node = node.getLeft();
+        }
+        return itr;
+    }
+
+
+
+
 }
