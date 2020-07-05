@@ -32,9 +32,9 @@ public class Tree<T extends Comparable<T>> {
      * Helper method for Node delete
      * Given a node Z and node Y. Node Z is getting deleted and Y is going to replace it
      */
-    public void transplantNode(TreeNode nodeTodelete, TreeNode replacementNode) {
-        assert nodeTodelete != null;
-        if (nodeTodelete.getParent() == null) {
+    void transplantNode(TreeNode nodeTodelete, TreeNode replacementNode, TreeNode nullNode) {
+        assert nodeTodelete != nullNode;
+        if (nodeTodelete.getParent() == nullNode) {
             // root Node
             this.root = replacementNode;
         } else if (nodeTodelete.getParent().getLeft() == nodeTodelete) {
@@ -43,9 +43,13 @@ public class Tree<T extends Comparable<T>> {
             nodeTodelete.getParent().setRight(replacementNode);
         }
 
-        if (replacementNode != null) {
+        if (replacementNode != nullNode) {
             replacementNode.setParent(nodeTodelete.getParent());
         }
+    }
+
+    public void transplantNode(TreeNode nodeTodelete, TreeNode replacementNode) {
+        this.transplantNode(nodeTodelete, replacementNode, null);
     }
 
     /**
@@ -56,6 +60,7 @@ public class Tree<T extends Comparable<T>> {
 
     public void deleteNode(TreeNode node) {
         if (node != null) {
+            /* One child situation */
             if (node.getLeft() == null) {
                 transplantNode(node, node.getRight());
             } else if (node.getRight() == null) {
@@ -76,7 +81,7 @@ public class Tree<T extends Comparable<T>> {
     }
 
 
-    private TreeNode getMinimumNodeInSubTree(TreeNode node) {
+    TreeNode getMinimumNodeInSubTree(TreeNode node) {
         TreeNode itr = null;
         while (node != null) {
             itr = node;

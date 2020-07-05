@@ -181,6 +181,73 @@ public class RedBlackTree<T extends Comparable<T>> extends Tree<T> implements Tr
 
     @Override
     public void transplantNode(TreeNode nodeTodelete, TreeNode replacementNode) {
-
+        super.transplantNode(nodeTodelete, replacementNode, SENTINEL_NODE);
     }
+
+    @Override
+    public void deleteNode(TreeNode node) {
+        RedBlackNode y = (RedBlackNode) node; // To keep track of node to delete
+        RedBlackNode x;  // To keep track of Node to replace.
+        Color originalColor = y.getColor();
+        /* Case 1: Only one child */
+        if (node.getLeft() == SENTINEL_NODE) {
+            x = ((RedBlackNode) node).getRight();
+            this.transplantNode(node, node.getRight());
+        } else if (node.getRight() == SENTINEL_NODE) {
+            x = ((RedBlackNode) node).getLeft();
+            this.transplantNode(node, node.getLeft());
+        } else {
+            y = (RedBlackNode) this.getMinimumNodeInSubTree(node.getRight());
+            x = y.getRight();
+            if ( y.getParent() == node) {
+                x.setParent(y);
+            } else {
+                this.transplantNode(y, y.getRight());
+                y.setRight(node.getRight());
+                y.getRight().setParent(y);
+            }
+            this.transplantNode(node, y);
+            y.setLeft(node.getLeft());
+            y.getLeft().setParent(y);
+            y.setColor(((RedBlackNode) node).getColor());
+        }
+        if (originalColor == Color.BLACK) {
+            // If black node is removed, red-black properties are violated.
+            this.deleteFixup(x);
+        }
+    }
+
+    /* To fixup property 2 and 4 */
+    private void deleteFixup(RedBlackNode x) {
+        while (x != root && x.getColor() == Color.BLACK) {
+            // If X is left child
+            if (x == x.getParent().getLeft()) {
+                RedBlackNode w = x.getParent().getRight();
+                if (w.getColor() == Color.RED) {
+                    w.setColor(Color.BLACK);
+                    x.getParent().setColor(Color.RED);
+                    this.rotateLeft(x.getParent());
+                    w = x.getParent().getRight();
+                }
+
+                if (w.getLeft().getColor() == Color.BLACK && w.getRight().getColor() == Color.BLACK) {
+                    w.setColor(Color.RED);
+                    x = x.getParent();
+                } else if (w.getRight().getColor() == Color.BLACK) {
+                    w.getLeft().setColor(Color.BLACK);
+                    w.setColor(Color.RED);
+                    this.rotateRight(w);
+                    w = x.getParent().getRight();
+                }
+                w.setColor(x.getParent().getColor());
+                x.getParent().setColor(Color.BLACK);
+                w.getRight().setColor(Color.BLACK);
+                this.rotateLeft(x.getParent());
+                x = root;
+            } else {
+                System.out.println("Not Implemented");
+            }
+        }
+    }
+
 }

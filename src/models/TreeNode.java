@@ -1,6 +1,6 @@
 package models;
 
-public class TreeNode<T> extends Node {
+public class TreeNode<T extends Comparable> extends Node {
     private TreeNode<T> left;
     private TreeNode<T> right;
     private TreeNode<T> parent;
@@ -12,7 +12,7 @@ public class TreeNode<T> extends Node {
         this.parent = builder.parent;
     }
 
-    public static class TreeNodeBuilder<T> extends Node.Builder<T>{
+    public static class TreeNodeBuilder<T extends Comparable> extends Node.Builder<T>{
         private TreeNode<T> left;
         private TreeNode<T> right;
         private TreeNode<T> parent = null;

@@ -12,8 +12,6 @@ public abstract class Node<T extends Comparable<T>> {
 
         public abstract Node build();
         public abstract Builder<T> self();
-
-        public abstract Builder<T> color(Color black);
     }
 
     Node (Builder<T> builder) {
